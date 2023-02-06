@@ -1,0 +1,72 @@
+; Conta numeri in stringa
+	.ORIG	x3000
+	LEA	R0,A
+	JSR	COUNT_NUM
+
+END	BRNZP	END
+A	.STRINGZ	"Ho comprato 10 matite da 50 centesimi l’una e mi sono costate 6,10 euro IVA inclusa"
+
+COUNT_NUM
+	ST	R1,BK1
+	ST	R2,BK2
+
+	AND	R2,R2,#0
+
+CHECK	LDR	R1,R0,#0
+	BRZ	FINE
+
+	LD	R3,MIN
+	NOT	R3,R3
+	ADD	R3,R3,#1
+
+	ADD	R1,R1,R3
+	BRN	REACH_SPACE
+	LDR	R1,R0,#0
+	LD 	R3,MAX	
+	NOT	R3,R3
+	ADD	R3,R3,#1
+	ADD	R1,R1,R3
+	BRP	REACH_SPACE
+; qui intervallo numeri
+	ADD	R2,R2,#1
+IN_NUM	ADD	R0,R0,#1
+	LDR	R1,R0,#0
+	BRZ	FINE
+	
+	LD	R3,VIR
+	NOT	R3,R3
+	ADD	R3,R3,#1
+	ADD	R3,R3,R1
+	BRZ	IN_NUM
+	LD	R3,SPACE
+	ADD	R3,R3,R1
+	BRNP	IN_NUM
+	ADD	R0,R0,#1
+	BRNZP	CHECK
+
+
+REACH_SPACE
+	LD	R3,SPACE
+CONTINUA
+	LDR	R1,R0,#0
+	BRZ	FINE
+	ADD	R0,R0,#1
+	ADD	R1,R1,R3
+	BRNP	CONTINUA		
+	BRNZP	CHECK	
+
+FINE	ADD	R0,R2,#0
+	LD	R1,BK1
+	LD	R2,BK2
+	LD	R3,BK3
+	RET	
+	
+
+BK1	.BLKW	1	; elemento caricato
+BK2	.BLKW	1	; contatore
+BK3	.BLKW	1	; gp
+MIN	.FILL	x30
+MAX	.FILL	x39
+VIR	.FILL	x2c
+SPACE	.FILL	#-32
+	.END

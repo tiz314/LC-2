@@ -1,0 +1,37 @@
+; Conta numero di numeri pari
+	.ORIG	x3000
+	LEA	R0,AR
+	JSR	CONTA_PARI
+END	BRNZP	END
+
+
+AR	.FILL	56
+	.FILL	-15
+	.FILL 	-3
+	.FILL 	-12
+	.FILL	14
+	.FILL	0
+
+
+; inizio subp
+
+CONTA_PARI
+	ST	R2,BK2
+	AND	R1,R1,#0
+
+CHECK	LDR	R2,R0,#0
+	BRZ	FINE
+	
+	AND	R2,R2,#1
+	BRNP	CONT
+	ADD	R1,R1,#1
+CONT	ADD	R0,R0,#1
+	BRNZP	CHECK
+FINE	LD	R2,BK2
+	RET
+
+BK2	.BLKW	1
+
+; Fine subp
+
+	.END

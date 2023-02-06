@@ -1,0 +1,68 @@
+; Sequenza simile a fibonacci ma con -
+	.ORIG	x3000
+	LD	R0,N
+
+	JSR	FIBO_MENO
+END	BRNZP	END
+
+N	.FILL	10
+; inizio subp
+
+FIBO_MENO
+	ST	R1,BK1
+	ST	R2,BK2
+	ST	R3,BK3
+
+	ADD	R0,R0,#0
+	BRNZ	NEGATIVO
+	ADD	R1,R0,#-1
+	BRZ	UNO
+	ADD	R1,R0,#-2
+	BRZ	DUE
+; Qui n maggiore di 2
+
+	AND	R2,R2,#0
+	ADD	R2,R2,#2
+	AND	R3,R3,#0
+	ADD	R3,R3,#1
+
+CHECK	ADD	R1,R2,#0
+	NOT	R1,R1
+	ADD	R1,R1,#1
+	ADD	R1,R1,R3	; nuovo numero
+	ADD	R3,R2,#0
+	ADD	R2,R1,#0
+	ADD	R0,R0,#-3
+	BRZ	FINE
+	ADD	R0,R0,#2
+	BRNZP	CHECK
+	
+FINE	ADD	R0,R2,#0
+	BRNZP	RESTORE
+
+
+
+NEGATIVO
+	AND	R0,R0,#0
+	BRNZP	RESTORE
+
+UNO	AND	R0,R0,#0
+	ADD	R0,R0,#1
+	BRNZP	RESTORE
+
+DUE	AND	R0,R0,#0
+	ADD	R0,R0,#2
+	BRNZP	RESTORE
+
+RESTORE	
+	LD	R1,BK1
+	LD	R2,BK2
+	LD	R3,BK3
+	RET
+
+BK1	.BLKW	1
+BK2	.BLKW	1	; ultimo numero
+BK3	.BLKW	1	; penultimo
+; fine subp
+
+	.END

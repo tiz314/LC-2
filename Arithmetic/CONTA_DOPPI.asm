@@ -1,0 +1,56 @@
+; Conta numero volte in cui sequenza ha doppio consecutivo
+	.ORIG	x3000
+	LEA	R0,A
+	JSR	CONTA_DOPPI
+END	BRNZP	END
+
+
+A	.FILL	5
+	.FILL 	10
+	.FILL	0
+
+CONTA_DOPPI
+	ST	R2,BK2
+	ST	R3,BK3
+	ST	R4,BK4
+	
+	AND	R3,R3,#0
+
+CHECK	LDR	R2,R0,#0
+	BRZ	FINE
+	LDR	R4,R0,#1
+	BRZ	FINE
+	ADD	R2,R2,R2
+	ADD	R4,R4,#0
+	BRP	POS
+	ADD	R2,R2,#0
+	BRP	CONT
+	NOT	R4,R4
+	ADD	R4,R4,#1
+SOMMA	ADD	R4,R4,R2
+	BRZ	INC
+CONT	ADD	R0,R0,#1
+	BRNZP	CHECK
+
+POS	ADD	R2,R2,#0
+	BRN	CONT
+	NOT	R4,R4
+	ADD	R4,R4,#1
+	BRNZP	SOMMA
+
+INC	ADD	R3,R3,#1
+	BRNZP	CONT
+
+FINE	ADD	R0,R3,#0
+	LD	R2,BK2
+	LD	R3,BK3
+	LD	R4,BK4
+	RET
+
+
+
+BK2	.BLKW	1	; elemento caricato
+BK3	.BLKW	1	; contatore
+BK4	.BLKW	1	; secondo elemento caricato
+
+	.END

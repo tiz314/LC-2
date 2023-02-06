@@ -1,0 +1,58 @@
+; Conta parità 1 in numero 16 bit
+	.ORIG	x3000
+	LD	R0,NUM
+	JSR	PAR_PARI
+END	BRNZP	END
+
+NUM	.FILL	b0011100011011110
+
+; inizio subp
+; Input: R0: numero
+; R1: mask
+; R3: risultato and
+; R2: contatore fino a 16
+; R4: contatore di 1
+; Output: R1: 1/0 parità
+
+PAR_PARI
+	ST	R2,BK2
+	ST	R3,BK3	
+	ST	R4,BK4
+
+	AND	R2,R2,#0	
+	AND	R1,R1,#0
+	AND	R4,R4,#0
+
+	ADD	R1,R1,#1
+	
+	
+CHECK	AND	R3,R0,R1
+	BRZ	NO_INC
+	ADD	R4,R4,#1
+NO_INC	ADD	R2,R2,#1
+	ADD	R3,R2,#-16
+	BRP	FINE
+	ADD	R1,R1,R1
+	BRNZP	CHECK
+
+FINE	AND	R3,R4,#1
+	BRZ	PARI
+	AND	R1,R1,#0
+	ADD	R1,R1,#1
+RESTORE	LD	R2,BK2
+	LD	R3,BK3
+	LD	R4,BK4
+	RET
+
+PARI	AND	R1,R1,#0
+	BRNZP	RESTORE
+
+
+
+BK2	.BLKW	1
+BK3	.BLKW	1
+BK4	.BLKW	1
+
+; fine subp
+
+	.END

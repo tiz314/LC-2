@@ -1,0 +1,72 @@
+; Gap tra minimo e massimo valore assoluto
+	.ORIG	x3000
+	LEA	R0,A
+	JSR	GAP_ASS
+END	BRNZP	END
+
+A	.FILL	1
+	.FILL	0
+
+; inizio subp
+
+GAP_ASS
+	ST	R1,BK1
+	ST	R2,BK2
+	ST	R3,BK3
+	AND	R3,R3,#0
+
+	LDR	R2,R0,#0	; carico candidato minimo
+	BRZ	FINE
+	BRP	LD_MAX	
+	NOT	R2,R2
+	ADD	R2,R2,#1	; rendo positivo
+LD_MAX	LDR	R3,R0,#0	; carico candidato massimo
+	BRP	CHECK
+	NOT	R3,R3
+	ADD	R3,R3,#1	; rendo positivo
+CHECK	ADD	R0,R0,#1
+	LDR	R1,R0,#0
+	BRZ	FINE
+	BRN	SOMMA_MIN
+	NOT	R1,R1
+	ADD	R1,R1,#1
+SOMMA_MIN
+	ADD	R1,R1,R2
+	BRP	NUOVO_MIN
+; ora check con max
+	LDR	R1,R0,#0
+	BRN	SOMMA_MAX
+	NOT	R1,R1
+	ADD	R1,R1,#1
+SOMMA_MAX
+	ADD	R1,R1,R2
+	BRP	NUOVO_MAX
+	BRNZP	CHECK
+
+NUOVO_MIN
+	LDR	R2,R0,#0
+	BRP	CHECK
+	NOT	R2,R2
+	ADD	R2,R2,#1
+	BRNZP	CHECK
+
+NUOVO_MAX
+	LDR	R3,R0,#0
+	BRP	CHECK
+	NOT	R3,R3
+	ADD	R3,R3,#1
+	BRNZP	CHECK
+
+FINE	NOT	R2,R2
+	ADD	R2,R2,#1
+	ADD	R0,R3,R2
+	LD	R1,BK1
+	LD	R2,BK2
+	LD	R3,BK3
+	RET
+
+BK1	.BLKW	1	; elemento caricato
+BK2	.BLKW	1	; minimo
+BK3	.BLKW	1	; massimo
+; fine subp
+	.END

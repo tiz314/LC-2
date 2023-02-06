@@ -1,0 +1,51 @@
+; Converti in comp a 2 e restituisci numero conversioni
+	.ORIG	x3000
+	LEA	R0,AR
+	JSR	CONV_COMPL_2
+END	BRNZP	END
+
+AR	.FILL	x8001
+	.FILL	x0015
+	.FILL	x8007
+	.FILL	x002A
+	.FILL	x0012
+	.FILL	0
+
+; inizio subp
+
+CONV_COMPL_2	
+
+	ST	R2,BK2
+	ST	R3,BK3
+	ST	R4,BK4
+
+	AND	R3,R3,#0
+	LD	R4,MASK
+
+CHECK	LDR	R2,R0,#0
+	BRZ	FINE
+	BRP	CONT
+	AND	R2,R2,R4
+	NOT	R2,R2
+	ADD	R2,R2,#1
+	STR	R2,R0,#0
+	ADD	R3,R3,#1
+CONT	ADD	R0,R0,#1
+	BRNZP	CHECK
+
+FINE	ADD	R0,R3,#0
+	LD	R2,BK2
+	LD	R3,BK3
+	LD	R4,BK4
+	RET
+
+
+BK2	.BLKW	1	; elemento caricato
+BK3	.BLKW	1	; contatore
+BK4	.BLKW	1	; mask
+
+MASK	.FILL	b0111111111111111
+
+; fine subp
+
+	.END

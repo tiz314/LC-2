@@ -1,0 +1,63 @@
+; check palindromo
+	.ORIG	x3000
+	LEA	R0,P
+	LEA	R1,F
+	ADD	R1,R1,#-2
+	JSR	VER_PALIN
+END	BRNZP	END
+	
+
+P	.STRINGZ	"ANTANI"
+F	.BLKW	1
+
+; inizio subp
+
+VER_PALIN
+	ST	R2,BK2
+	ST	R3,BK3
+	ST	R4,BK4
+
+	NOT	R1,R1
+	ADD	R1,R1,#1
+
+	ADD	R4,R0,R1
+	BRZP	SI
+
+CHECK	ADD	R4,R0,R1
+	ADD	R4,R4,#1
+	BRP	SI		; rimasta una sola lettera o 0 da controllare
+	LDR	R2,R0,#0
+	ADD	R4,R0,#1
+SHIFT	ADD	R3,R4,R1
+	BRZ	REACHED
+	ADD	R4,R4,#1
+	BRNZP	SHIFT
+REACHED	LDR	R3,R4,#0
+	NOT	R3,R3
+	ADD	R3,R3,#1
+	ADD	R3,R3,R2
+	BRNP	NO
+	ADD	R0,R0,#1
+	ADD	R1,R1,#1
+	BRNZP	CHECK
+
+SI	AND	R0,R0,#0
+	BRNZP	RESTORE
+
+NO	AND	R0,R0,#0
+	ADD	R0,R0,#1
+	BRNZP	RESTORE
+
+RESTORE
+	LD	R2,BK2
+	LD	R3,BK3
+	LD	R4,BK4
+	RET
+
+
+BK2	.BLKW	1	; char inizio
+BK3	.BLKW	1	; char fine
+BK4	.BLKW	1	; indirizzo ausiliario
+; fine subp
+
+	.END

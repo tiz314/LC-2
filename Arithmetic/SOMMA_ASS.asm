@@ -1,0 +1,52 @@
+; Conversione in valori assoluti e somma di questi
+	.ORIG	x3000
+	LEA	R0,A
+	LEA	R1,F
+	JSR	SOMMA_ASS
+END	BRNZP	END
+
+	
+A	.FILL	-56
+	.FILL	15
+	.FILL	-9
+	.FILL	0
+	.FILL	27
+F	.FILL	12
+
+; inizio subp
+
+SOMMA_ASS
+	ST	R2,BK2	
+	ST	R3,BK3
+	ST	R4,BK4
+
+	AND	R3,R3,#0
+
+	NOT	R1,R1
+	ADD	R1,R1,#1
+
+CHECK	ADD	R4,R0,R1
+	BRP	FINE
+
+	LDR	R2,R0,#0
+	BRZP	CONT
+	NOT	R2,R2
+	ADD	R2,R2,#1
+	STR	R2,R0,#0
+CONT	ADD	R3,R3,R2	
+	ADD	R0,R0,#1
+	BRNZP	CHECK
+
+FINE	ADD	R0,R3,#0
+	LD	R2,BK2
+	LD	R3,BK3
+	LD	R4,BK4
+	RET
+
+BK2	.BLKW	1
+BK3	.BLKW	1
+BK4	.BLKW	1
+; fine subp
+
+
+	.END

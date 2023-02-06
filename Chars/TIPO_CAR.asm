@@ -1,0 +1,78 @@
+; Restituisci tipo di carattere
+	.ORIG	x3000
+	LD	R0,CAR
+	JSR	TIPO_CAR
+END	BRNZP	END
+
+CAR	.FILL	58
+; Inizio subp
+; Utilizzo registri:
+; INPUT: R0: carattere
+;	 R1: backup carattere 
+; 	 R2: check
+; OUTPUT: R1: tipo carattere
+TIPO_CAR
+	ST	R2,BK2
+	ADD	R1,R0,#0	; copio carattere
+	
+	LD	R2,MIN
+	ADD	R1,R1,R2
+	BRNZ	CONTROLLO
+	
+	ADD	R1,R0,#0
+	LD	R2,CIF_MIN
+	ADD	R1,R1,R2
+	BRN	NULLO
+	ADD	R1,R0,#0
+	LD	R2,CIF_MAX
+	ADD	R1,R1,R2
+	BRNZ	CIFRA
+
+	ADD	R1,R0,#0
+	LD	R2,MA_MIN
+	ADD	R1,R1,R2
+	BRN	NULLO
+	ADD	R1,R0,#0
+	LD	R2,MA_MAX
+	ADD	R1,R1,R2
+	BRNZ	MAIUSCOLO
+
+	ADD	R1,R0,#0
+	LD	R2,MI_MIN
+	ADD	R1,R1,R2
+	BRN	NULLO
+	AND	R1,R1,#0
+	ADD	R1,R1,#4
+FINE	LD	R2,BK2
+	RET
+	
+
+CONTROLLO
+	AND	R1,R1,#0
+	ADD	R1,R1,#1
+	BRNZP	FINE
+
+NULLO	AND	R1,R1,#0
+	ADD	R1,R1,#5
+	BRNZP	FINE
+
+CIFRA	AND	R1,R1,#0
+	ADD	R1,R1,#2
+	BRNZP	FINE
+
+MAIUSCOLO
+	AND	R1,R1,#0
+	ADD	R1,R1,#3
+	BRNZP	FINE
+
+MIN	.FILL	#-32
+CIF_MIN	.FILL	#-48
+CIF_MAX	.FILL	#-57
+MA_MIN	.FILL	#-65
+MA_MAX	.FILL	#-90
+MI_MIN	.FILL	#-97
+
+BK2	.BLKW	1
+; Fine subp
+
+	.END

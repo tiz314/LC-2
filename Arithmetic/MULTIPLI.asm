@@ -1,0 +1,39 @@
+; Multipli del numero
+	.ORIG	x3000
+	LD	R0,NUM
+	LEA	R1,A_I
+	JSR	MULTIPLI
+END	BRNZP	END
+
+
+NUM	.FILL	-8000
+A_I	.BLKW	5
+
+; inizio subp
+
+MULTIPLI
+	ST	R2,BK2
+	ADD	R2,R0,#0
+SOMMA	STR	R0,R1,#0
+	ADD	R0,R0,#0
+	BRP	POS
+; Qui negativo
+	ADD	R0,R0,R2
+	BRP	FINE	
+	ADD	R1,R1,#1
+	BRNZP	SOMMA
+
+POS	ADD	R0,R0,R2
+	BRN	FINE
+	ADD	R1,R1,#1
+	BRNZP	SOMMA
+
+FINE	AND	R0,R0,#0
+	STR	R0,R1,#2
+	LD	R2,BK2
+	RET
+
+BK2	.BLKW	1
+; fine subp
+
+	.END
